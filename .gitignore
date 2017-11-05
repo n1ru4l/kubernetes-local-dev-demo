@@ -11,3 +11,6 @@ lib
 node_modules/
 npm-debug.log
 yarn-error.log
+
+# k8s
+kube/*.local.yaml

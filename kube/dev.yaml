@@ -1,0 +1,57 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment  
+metadata:  
+  labels:
+    app: sample-app
+  name: sample-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: sample-app
+  template:
+    metadata:
+      labels:
+        k8s-app: sample-app
+    spec:
+      containers:
+        - name: sample-app
+          imagePullPolicy: Always
+          image: node:8.9.0-alpine
+          command:
+            - yarn
+          args:
+            - dev
+          workingDir: "/app"
+          ports:
+            - containerPort: 8080
+            - containerPort: 5858
+          volumeMounts:
+            - name: code
+              mountPath: /app
+      volumes:
+        - name: code
+          hostPath: 
+            path: __PROJECT_PATH__
+
+---
+apiVersion: v1  
+kind: Service  
+metadata:
+  name: sample-app
+  namespace: default
+  labels:
+    app: sample-app
+spec:
+  selector:
+    k8s-app: sample-app
+  ports:
+    - name: app-port
+      port: 8080
+      nodePort: 30005
+    - name: debug-port
+      port: 5858
+      nodePort: 30006
+  type: NodePort

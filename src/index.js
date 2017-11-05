@@ -17,4 +17,3 @@ app.listen(PORT, err => {
   if (!err) return console.log(`app is ready.`)
   console.log(err.message)
 })
-

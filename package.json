@@ -12,9 +12,13 @@
   "scripts": {
     "cm": "git-cz",
     "build": "babel src --out-dir lib --ignore src/__tests__",
-    "postbuild": "babel-node scripts/prepare-docker-build.js",
-    "start": "lib src/index.js",
-    "dev": "nodemon --exec 'babel-node src/index.js'"
+    "build-prod": "yarn build",
+    "postbuild-prod": "babel-node scripts/bundle.js",
+    "build-dev": "yarn build --source-maps",
+    "postbuild-dev": "node --inspect=0.0.0.0:5858 lib/index.js",
+    "setup-dev": "babel-node scripts/setup-dev.js",
+    "dev": "nodemon --watch src --legacy-watch --exec 'yarn build-dev'",
+    "start": "lib src/index.js"
   },
   "files": ["lib", "yarn.lock", "LICENSE"],
   "dependencies": {
